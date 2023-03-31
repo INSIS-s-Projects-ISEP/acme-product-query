@@ -1,19 +1,28 @@
 package com.isep.acme.domain.model;
 
-import javax.persistence.*;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import com.isep.acme.dto.ProductDTO;
 
-import java.util.Objects;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Product {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productID;
+    private Long productId;
 
     @Column(nullable = false, unique = true)
     public String sku;
@@ -23,28 +32,23 @@ public class Product {
 
     @Column(nullable = false)
     private String description;
-    /*
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Review> review = new ArrayList<Review>(); */
 
-    protected Product(){}
-
-    public Product(final Long productID, final String sku) {
-        this.productID = Objects.requireNonNull(productID);
+    public Product(Long productId, String sku) {
+        this.productId = Objects.requireNonNull(productId);
         setSku(sku);
     }
 
-    public Product(final Long productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
+    public Product(Long productId, String sku, String designation, String description) {
+        this(productId, sku);
         setDescription(description);
         setDesignation(designation);
     }
 
-    public Product(final String sku) {
+    public Product(String sku) {
         setSku(sku);
     }
 
-    public Product(final String sku, final String designation, final String description) {
+    public Product(String sku, String designation, String description) {
         this(sku);
         setDescription(description);
         setDesignation(designation);
@@ -61,10 +65,6 @@ public class Product {
         this.sku = sku;
     }
 
-    public String getDesignation() {
-        return designation;
-    }
-
     public void setDesignation(String designation) {
         if (designation == null || designation.isBlank()) {
             throw new IllegalArgumentException("Designation is a mandatory attribute of Product.");
@@ -73,10 +73,6 @@ public class Product {
             throw new IllegalArgumentException("Designation must not be greater than 50 characters.");
         }
         this.designation = designation;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
@@ -91,31 +87,13 @@ public class Product {
         this.description = description;
     }
 
-    public String getSku() {
-        return sku;
-    }
-
-
     public void updateProduct(Product p) {
         setDesignation(p.designation);
         setDescription(p.description);
     }
 
-    public Long getProductID() {
-        return productID;
-    }
-
     public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
     }
-/*
-    public List<Review> getReview() {
-        return review;
-    }
-
-    public void setReview(List<Review> review) {
-        this.review = review;
-    }
-*/
 
 }

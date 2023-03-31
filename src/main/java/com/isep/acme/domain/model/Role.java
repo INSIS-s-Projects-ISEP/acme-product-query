@@ -7,7 +7,6 @@ import lombok.Value;
 
 @Value
 @AllArgsConstructor
-
 public class Role implements GrantedAuthority {
 
     public static final String Admin = "Admin";

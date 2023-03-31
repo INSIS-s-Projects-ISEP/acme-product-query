@@ -14,7 +14,6 @@ import com.isep.acme.dto.mapper.UserViewMapper;
 
 import java.util.Optional;
 
-
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -30,7 +29,7 @@ public class UserService implements UserDetailsService {
                 () -> new UsernameNotFoundException(String.format("User with username - %s, not found", username)));
     }
 
-    public UserView getUser(final Long userId){
+    public UserView getUser(final Long userId) {
         return userViewMapper.toUserView(userRepo.getById(userId));
     }
 

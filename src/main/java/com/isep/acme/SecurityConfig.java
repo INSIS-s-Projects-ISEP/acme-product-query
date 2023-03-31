@@ -66,7 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .orElseThrow(() -> new UsernameNotFoundException(format("User: %s, not found", username))));
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Enable CORS and disable CSRF
@@ -80,9 +79,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 exceptions -> exceptions.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
 
-        // required by h2-console according to https://stackoverflow.com/questions/40165915/why-does-the-h2-console-in-spring-boot-show-a-blank-screen-after-logging-in
+        // required by h2-console according to
+        // https://stackoverflow.com/questions/40165915/why-does-the-h2-console-in-spring-boot-show-a-blank-screen-after-logging-in
         http.headers().frameOptions().disable();
-
 
         // Set permissions on endpoints
         http.authorizeRequests()
@@ -90,29 +89,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers(format("%s/**", restApiDocPath)).permitAll()
                 .antMatchers(format("%s/**", swaggerPath)).permitAll()
-                //.antMatchers("").permitAll()
+                // .antMatchers("").permitAll()
 
                 // Our public endpoints
                 .antMatchers(HttpMethod.GET, "/product/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/product/**/reviews").permitAll()
                 .antMatchers(HttpMethod.GET, "/aggregatedrating/**").permitAll()
-               // .antMatchers(HttpMethod.POST, "/product/**/reviews").permitAll()
-               // .antMatchers(HttpMethod.POST, "/uploadFile").permitAll()
-                //.antMatchers(HttpMethod.POST, "/uploadMultipleFiles").permitAll()
-                //.antMatchers(HttpMethod.GET, "/fileid").permitAll()
+                // .antMatchers(HttpMethod.POST, "/product/**/reviews").permitAll()
+                // .antMatchers(HttpMethod.POST, "/uploadFile").permitAll()
+                // .antMatchers(HttpMethod.POST, "/uploadMultipleFiles").permitAll()
+                // .antMatchers(HttpMethod.GET, "/fileid").permitAll()
                 // Our private endpoints
-               .antMatchers(HttpMethod.GET,"/admin/user/**").hasRole(Role.Admin)
-               .antMatchers(HttpMethod.POST, "/product/**/reviews/**").hasRole(Role.RegisteredUser)
-               .antMatchers(HttpMethod.PUT, "/review/**/vote").hasRole(Role.RegisteredUser)
-               .antMatchers(HttpMethod.GET, "/review/pendingreview").hasRole(Role.Mod)
+                .antMatchers(HttpMethod.GET, "/admin/user/**").hasRole(Role.Admin)
+                .antMatchers(HttpMethod.POST, "/product/**/reviews/**").hasRole(Role.RegisteredUser)
+                .antMatchers(HttpMethod.PUT, "/review/**/vote").hasRole(Role.RegisteredUser)
+                .antMatchers(HttpMethod.GET, "/review/pendingreview").hasRole(Role.Mod)
                 .antMatchers(HttpMethod.PUT, "/review/acceptrejectreview/**").hasRole(Role.Mod)
                 .antMatchers(HttpMethod.GET, "/review/**").hasRole(Role.RegisteredUser)
 
+                // .antMatchers("/product/**/reviews").hasRole(Role.RegisteredUser).antMatchers(HttpMethod.POST,
+                // "/product/**/reviews")
+                // .hasRole(Role.RegisteredUser).anyRequest().authenticated()
 
-               // .antMatchers("/product/**/reviews").hasRole(Role.RegisteredUser).antMatchers(HttpMethod.POST, "/product/**/reviews")
-               // .hasRole(Role.RegisteredUser).anyRequest().authenticated()
-
-                //.antMatchers("/review/**/vote").hasRole(Role.RegisteredUser).antMatchers()
+                // .antMatchers("/review/**/vote").hasRole(Role.RegisteredUser).antMatchers()
 
                 // Set up oauth2 resource server
                 .and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer().jwt();
@@ -168,7 +167,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-
 
     }
 

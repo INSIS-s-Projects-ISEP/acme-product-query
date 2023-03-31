@@ -1,19 +1,27 @@
 package com.isep.acme.domain.model;
 
 import javax.annotation.Resource;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 import com.isep.acme.dto.ImageDTO;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class ProdImage {
 
     @Id
     @GeneratedValue
     private Long id;
-
-
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id")
@@ -22,37 +30,7 @@ public class ProdImage {
     @Lob
     private Resource image;
 
-
-
-
-public ProdImage( Product product, Resource image){
-    setProduct(product);
-    //addImage(image);;
-
-}
-
-
-
-
-    public ProdImage() {
-
-    }
-
-    private void setProduct(Product product) {
-    }
-
-
-
-
     public ImageDTO toDto() {
-        return new ImageDTO(this.id, product.getProductID());
+        return new ImageDTO(this.id, product.getProductId());
     }
-
-/*
-    public ImageService addImage( Resource image){
-
-        return new AddImage (this.image);
-    }
-*/
 }
-

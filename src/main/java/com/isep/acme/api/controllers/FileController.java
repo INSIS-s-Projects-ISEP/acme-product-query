@@ -1,13 +1,17 @@
 package com.isep.acme.api.controllers;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,23 +23,18 @@ import com.isep.acme.domain.repository.ProductRepository;
 import com.isep.acme.domain.service.FileStorageService;
 import com.isep.acme.dto.response.UploadFileResponse;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 
 
 @RestController
+@AllArgsConstructor
 public class FileController {
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired
-    private FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
-    @Autowired
-    private ImageRepository iRepo;
+    private final ImageRepository iRepo;
 
-    @Autowired
-    private ProductRepository pRepo;
+    private final ProductRepository pRepo;
 
 
     @GetMapping(value = "/fileid/{id}")

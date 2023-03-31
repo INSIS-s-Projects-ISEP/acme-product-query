@@ -1,16 +1,25 @@
 package com.isep.acme.domain.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.util.*;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -36,18 +45,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String morada;
 
-/*    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Review> review = new ArrayList<Review>(); */
-
-    protected User() {}
-
-    public User(final String username, final String password){
-        this.username = username;
-        this.password = password;
-    }
-
-
-    public User(final String username, final String password, final String fullName, final String nif, final String morada) {
+    public User(final String username, final String password, final String fullName, final String nif,
+            final String morada) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -60,12 +59,11 @@ public class User implements UserDetails {
     }
 
     public void setNif(String nif) {
-        if(nif.length() != 9) {
+        if (nif.length() != 9) {
             throw new IllegalArgumentException("NIF must be 9 characters.");
         }
         this.nif = nif;
     }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -87,4 +85,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-

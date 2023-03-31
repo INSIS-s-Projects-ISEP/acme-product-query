@@ -4,13 +4,12 @@ import com.isep.acme.domain.service.ImageService;
 
 public class ImageDTO {
 
-
     private ImageService service;
     private Long id;
 
     private Long productID;
 
-    public ImageDTO(Long id, Long productID){
+    public ImageDTO(Long id, Long productID) {
 
         this.id = id;
         this.productID = productID;
@@ -33,5 +32,7 @@ public class ImageDTO {
         this.id = id;
     }
 
-    public Iterable<ImageDTO> getImageProduct(){return service.getImageProduct();}
+    public Iterable<ImageDTO> getImageProduct() {
+        return service.getImageProduct();
+    }
 }

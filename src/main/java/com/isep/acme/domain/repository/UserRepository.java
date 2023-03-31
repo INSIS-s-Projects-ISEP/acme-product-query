@@ -28,10 +28,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findById(Long userId);
 
     @Cacheable
-    default User getById(final Long userId){
+    default User getById(final Long userId) {
         final Optional<User> optionalUser = findById(userId);
 
-        if(optionalUser.isEmpty()){
+        if (optionalUser.isEmpty()) {
             throw new ResourceNotFoundException(User.class, userId);
         }
         if (!optionalUser.get().isEnabled()) {
@@ -42,6 +42,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Cacheable
     Optional<User> findByUsername(String username);
-
 
 }

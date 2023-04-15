@@ -1,32 +1,29 @@
-import mongoose from 'mongoose';
-import Product from '../model/product';
 import ProductModel from '../../database/schemas/productDatabase';
-// const ProductData = mongoose.model('Product');
 
 
 class ProductRepository {
     
-    static async findAllProducts(){
+    async findAllProducts(){
         const products = ProductModel.find();
         return products
     }
 
-    static async findProductBySku(sku: string) {
+    async findProductBySku(sku: string) {
         const product = ProductModel.find({sku});
         return product
     }
     
-    static async findProductById(id: string) {
-        const res = ProductModel.findById(id);
-        return res
+    async findProductById(id: string) {
+        const product = ProductModel.findById(id);
+        return product
     }
 
-    // static async createProd(sku: string, designation: string, description: string) {
-    //     const res = ProductModel.createProd({sku, designation, description});
-    //     return res
-    // }
+    async create(sku: string, designation: string, description: string) {
+        const created = ProductModel.create({sku, designation, description});
+        return created
+    }
 
-    static async searchByDesignation(designation: string){
+    async findByDesignation(designation: string){
         const product = ProductModel.find({ designation });
         return product;
       }

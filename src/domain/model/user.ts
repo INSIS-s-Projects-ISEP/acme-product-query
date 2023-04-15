@@ -1,11 +1,6 @@
 import { Role } from "./role";
 
 export interface User {
-    // username: string;
-    // password: string;
-    // authorities: string;
-    // isEnabled: boolean;
-
   username: string;
   password: string;
   fullName: string;

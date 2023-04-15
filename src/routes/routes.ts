@@ -13,4 +13,5 @@ routes.get("/products/designation/:designation", ProductController.searchByDesig
 
 routes.post("/products", ProductController.create);
 
+
 export default routes;

@@ -1,2 +1,6 @@
+
+# dependencies
+/node_modules
+
 dados/
-node_modules/
+.vscode/

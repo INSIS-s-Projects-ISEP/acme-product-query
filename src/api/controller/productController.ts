@@ -104,6 +104,41 @@ static async searchByDesignation(request: Request, response: Response): Promise<
   }
 
 
+  static async deleteBySku(request: Request, response: Response) {
+    try {
+      const sku = request.params.sku;
+      const result = await productService.deleteBySku(sku);
+  
+      if (result) {
+        response.sendStatus(200);
+      } else {
+        response.sendStatus(404);
+      }
+    } catch (error) {
+      response.status(400).json({ message: error });
+    }
+  }
+
+
+  static async updateProduct(req: Request, res: Response): Promise<void> {
+    const { sku, designation, description } = req.body;
+    console.log("22222222222",sku)
+  
+    try {
+      const product = await productService.findSkuUpdate(sku, designation, description );
+      console.log(sku)
+  
+      if (!product) {
+        res.status(404).json({ message: 'Product not found' });
+        return;
+      }  
+      res.status(200).json(product);
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({ message: 'Internal server error' });
+    }
+  }
+
 }
 
 export default ProductController;

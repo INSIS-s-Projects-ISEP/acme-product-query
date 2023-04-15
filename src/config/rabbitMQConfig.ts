@@ -3,7 +3,7 @@ import { Channel, Connection } from "amqplib";
 import { v4 as uuidv4 } from "uuid";
 import ProductConsumer from "../messaging/productConsumer";
 
-const host = "localhost";
+const host = "192.168.1.253";
 const port = 5672;
 const user = "admin";
 const pass = "123456";

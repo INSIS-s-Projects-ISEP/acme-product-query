@@ -13,29 +13,39 @@ class ProductService{
       }
     
       async getProductById(id: string) {
-        // validação do id do usuário
         const result = await this.productRepository.findProductById(id);
         return result;
       }
     
       async getProductBySku(sku: string) {
-        // validação dos dados do usuário
         const result = await this.productRepository.findProductBySku(sku);
         return result;
       }
 
       async getProductByDesignation(designation: string) {
-        // validação dos dados do usuário
         const result = await this.productRepository.findByDesignation(designation);
         return result;
       }
     
       async findAllProducts() {
-        // validação do id do usuário
         const result = await this.productRepository.findAllProducts();
         return result;
       
     }
+
+
+    async deleteBySku(sku: string) {
+      const result = await this.productRepository.deleteBySku(sku);
+      return result;
+    
+  }  
+
+  async findSkuUpdate(sku: string, designation: string, description: string ) {
+    console.log(sku)
+    const result = await this.productRepository.update(sku, designation, description );
+    return result;
+  
+}
 
 }
 

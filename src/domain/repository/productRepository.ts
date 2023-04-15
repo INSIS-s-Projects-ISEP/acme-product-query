@@ -1,4 +1,6 @@
+import { Model } from 'mongoose';
 import ProductModel from '../../database/schemas/productDatabase';
+import Product from '../model/product';
 
 
 class ProductRepository {
@@ -26,6 +28,26 @@ class ProductRepository {
     async findByDesignation(designation: string){
         const product = ProductModel.find({ designation });
         return product;
+      }
+
+      async deleteBySku(sku: string):Promise<any>{
+        const result = await ProductModel.deleteOne({ sku });
+        return result;
+
+      }
+
+      async update(
+        sku: string,
+        designation: string,
+        description: string
+      ): Promise<Product | null> {
+        console.log(sku)
+        const product = await ProductModel.findOneAndUpdate(
+          { sku: sku },
+          { designation: designation, description: description },
+          { new: true }
+        );
+        return product ? product.toObject() : null;
       }
 
     

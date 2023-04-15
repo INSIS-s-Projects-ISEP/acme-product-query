@@ -13,5 +13,9 @@ routes.get("/products/designation/:designation", ProductController.searchByDesig
 
 routes.post("/products", ProductController.create);
 
+routes.delete('/products/sku/:sku', ProductController.deleteBySku);
+
+routes.put('/products/sku/:sku', ProductController.updateProduct);
+
 
 export default routes;

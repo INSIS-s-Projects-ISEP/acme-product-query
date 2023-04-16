@@ -3,17 +3,18 @@ import { Channel, Connection } from "amqplib";
 import { v4 as uuidv4 } from "uuid";
 import ProductConsumer from "../messaging/productConsumer";
 
+const idInstance = uuidv4()
 const host = "192.168.1.253";
 const port = 5672;
 const user = "admin";
 const pass = "123456";
-const queueCreate = "product.product-created.product-query." + uuidv4();
+const queueCreate = "product.product-created.product-query." + idInstance;
 const exchangeCreate = "product.product-created";
 
-const queueUpdate = "product.product-updated.product-query." + uuidv4();
+const queueUpdate = "product.product-updated.product-query." + idInstance;
 const exchangeUpdate = "product.product-updated";
 
-const queueDelete = "product.product-deleted.product-query." + uuidv4();
+const queueDelete = "product.product-deleted.product-query." + idInstance;
 const exchangeDelete = "product.product-deleted";
 
 const exchangeType = "fanout";
@@ -46,15 +47,19 @@ class RabbitMQConfig {
       await this.bindingProductQueueExchange(queueUpdate, exchangeUpdate);
       await this.bindingProductQueueExchange(queueCreate, exchangeCreate);
 
+      
       console.log(`Connected to RabbitMQ at ${host}:${port}`);
-
+      
       const consumerDel = new ProductConsumer(this.channel, queueDelete);
       await consumerDel.consumeDel();
       const consumerUpdate = new ProductConsumer(this.channel, queueUpdate);
       await consumerUpdate.consumeUpdate();
       const consumerCreate = new ProductConsumer(this.channel, queueCreate);
       await consumerCreate.consumeCreate();
-
+      
+      const consumerRPC = new ProductConsumer(this.channel, '');
+      await consumerRPC.consumeRPC();
+      
       return connection;
     } catch (err) {
       console.error(`Error connecting to RabbitMQ: ${err}`);
@@ -86,10 +91,6 @@ class RabbitMQConfig {
         exchangeType,
         { durable: true }
       );
-
-      console.log(`Exchange ${exchangeName} created.`);
-      // await this.channel?.close();
-      // await this.connection?.close();
 
       if (createFanout) {
         console.log(`Exchange ${exchangeName} already exists.`);

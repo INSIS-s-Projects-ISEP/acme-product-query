@@ -5,7 +5,7 @@ services:
     container_name: 'rabbitmq-query'
     restart: always
     ports:
-      - 5672:5672
+      - 5671:5671
       - 15672:15672
     volumes:
       - ./dados:/var/lib/rabbitmq/

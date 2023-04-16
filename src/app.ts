@@ -16,9 +16,6 @@ app.use(routes);
 const rabbitMQConfig = new RabbitMQConfig();
 rabbitMQConfig.connect();
 
-
-
-
 app.listen(3000, () =>{
     console.log("Server is Listening");
 })

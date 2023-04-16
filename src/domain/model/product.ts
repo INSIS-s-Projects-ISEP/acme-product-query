@@ -17,11 +17,6 @@ class Product{
         this.designation = designation;
         this.description = description;        
     }
-
-    // constructor(productId: number, sku: string);
-    // constructor(productId: number, sku: string, designation: string, description: string);
-    // constructor(sku: string);
-    // constructor(sku: string, designation: string, description: string);
     public setSku(sku: string): void {
         if (!sku || sku.trim().length === 0) {
             throw new Error("SKU is a mandatory attribute of Product.");

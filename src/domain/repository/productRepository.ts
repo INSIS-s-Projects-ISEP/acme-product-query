@@ -1,4 +1,3 @@
-import { Model } from 'mongoose';
 import ProductModel from '../../database/schemas/productDatabase';
 import Product from '../model/product';
 
@@ -31,9 +30,13 @@ class ProductRepository {
       }
 
       async deleteBySku(sku: string):Promise<any>{
-        const result = await ProductModel.deleteOne({ sku });
+        // await mongoose.connect('mongodb://127.0.0.1/productquery');
+        // console.log(typeof sku);
+        // console.log("------------------sku--------------------", sku.toString())
+        // const result = await db.collection('products').deleteOne({ sku: sku });
+        const result = await ProductModel.deleteOne({ sku: sku });
+        // const result = await ProductModel.findByIdAndDelete(id);
         return result;
-
       }
 
       async update(
@@ -41,7 +44,6 @@ class ProductRepository {
         designation: string,
         description: string
       ): Promise<Product | null> {
-        console.log(sku)
         const product = await ProductModel.findOneAndUpdate(
           { sku: sku },
           { designation: designation, description: description },

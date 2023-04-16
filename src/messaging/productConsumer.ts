@@ -1,7 +1,6 @@
 import { Channel, ConsumeMessage } from "amqplib";
 import ProductRepository from "../domain/repository/productRepository";
 
-const exchangeRPC = "rpc.product.product-query-bootstrapper";
 class ProductConsumer {
   productRepository: ProductRepository;
 
@@ -14,25 +13,28 @@ class ProductConsumer {
     this.productRepository = new ProductRepository();
   }
 
-  public async consumeRPC() {
-    console.log(`Consumer listening RPC on queue ${this.queueName}`);
+  public async consumeRPC(queueN: string, idInstance: string) {
 
-    await this.channel.assertQueue("", { exclusive: true, autoDelete: true });
-    await this.channel.assertExchange(exchangeRPC, "fanout", { durable: true });
+    this.channel.assertExchange(queueN, 'fanout');
 
-    await this.channel.consume(exchangeRPC, async (msg) => {
-      if (msg) {
-        const { payload, correlationId } = JSON.parse(msg.content.toString());
-
-        this.channel.sendToQueue(
-          msg.properties.replyTo,
-          Buffer.from(JSON.stringify(payload)),
-          { correlationId }
-        );
-
-        this.channel.ack(msg);
-      }
+    const queueResult = this.channel.assertQueue('', {
+      exclusive: true, autoDelete: true
     });
+
+      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C",(await queueResult).queue);
+      this.channel.bindQueue((await queueResult).queue, queueN, '');
+
+
+        this.channel.consume((await queueResult).queue, (msg) => {
+          console.log(`Resposta: ${msg?.content.toString()}`);
+        }, { noAck: true });
+
+        const payload = JSON.stringify(idInstance)
+      const options = { replyTo: (await queueResult).queue};
+      this.channel.sendToQueue(queueN, Buffer.from(JSON.stringify(payload)), options);
+
+      await this.channel.deleteQueue((await queueResult).queue);
+              
   }
 
   public async consumeGet(): Promise<void> {
@@ -108,26 +110,9 @@ class ProductConsumer {
     try {
       await this.productRepository.create(sku, designation, description);
       this.channel.ack(msg);
-      this.channel.sendToQueue(
-        "products",
-        Buffer.from(
-          JSON.stringify({
-            success: true,
-            message: "Product saved successfully",
-          })
-        )
-      );
     } catch (error) {
       this.channel.ack(msg);
-      this.channel.sendToQueue(
-        "products",
-        Buffer.from(
-          JSON.stringify({
-            success: false,
-            message: "Failed to save product",
-          })
-        )
-      );
+      
     }
   }
 
@@ -146,38 +131,38 @@ class ProductConsumer {
     description: string,
     msg: ConsumeMessage
   ) {
-    try {
+    // try {
       await this.productRepository.update(sku, designation, description);
 
       this.channel.ack(msg);
-      this.channel.sendToQueue(
-        queueName,
-        Buffer.from(
-          JSON.stringify({
-            success: true,
-            message: "Product updated successfully",
-          })
-        )
-      );
-      this.channel.ack(msg);
-      this.channel.sendToQueue(
-        queueName,
-        Buffer.from(
-          JSON.stringify({ success: false, message: "Product not found" })
-        )
-      );
-    } catch (error) {
-      this.channel.ack(msg);
-      this.channel.sendToQueue(
-        queueName,
-        Buffer.from(
-          JSON.stringify({
-            success: false,
-            message: "Failed to update product",
-          })
-        )
-      );
-    }
+      // this.channel.sendToQueue(
+      //   queueName,
+      //   Buffer.from(
+      //     JSON.stringify({
+      //       success: true,
+      //       message: "Product updated successfully",
+      //     })
+      //   )
+      // );
+      // this.channel.ack(msg);
+      // this.channel.sendToQueue(
+      //   queueName,
+      //   Buffer.from(
+      //     JSON.stringify({ success: false, message: "Product not found" })
+      //   )
+      // );
+    // } catch (error) {
+      // this.channel.ack(msg);
+      // this.channel.sendToQueue(
+      //   queueName,
+        // Buffer.from(
+        //   JSON.stringify({
+        //     success: false,
+        //     message: "Failed to update product",
+        //   })
+        // )
+      // );
+    // }
   }
 
   async getAllProdRabbitMQ(msg: ConsumeMessage): Promise<void> {

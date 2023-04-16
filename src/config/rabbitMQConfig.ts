@@ -49,6 +49,7 @@ class RabbitMQConfig {
 
       
       console.log(`Connected to RabbitMQ at ${host}:${port}`);
+     
       
       const consumerDel = new ProductConsumer(this.channel, queueDelete);
       await consumerDel.consumeDel();
@@ -56,9 +57,9 @@ class RabbitMQConfig {
       await consumerUpdate.consumeUpdate();
       const consumerCreate = new ProductConsumer(this.channel, queueCreate);
       await consumerCreate.consumeCreate();
-      
       const consumerRPC = new ProductConsumer(this.channel, '');
-      await consumerRPC.consumeRPC();
+      await consumerRPC.consumeRPC('rpc.product.product-query-bootstrapper', idInstance);
+      
       
       return connection;
     } catch (err) {

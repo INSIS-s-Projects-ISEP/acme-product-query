@@ -4,11 +4,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install -g npm@9.6.4
 
 COPY . .
 
-RUN npm run build
+# RUN npm run build
 
 FROM node:alpine as production
 

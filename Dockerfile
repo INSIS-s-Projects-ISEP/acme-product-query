@@ -1,19 +1,31 @@
-# Dependencies Cache and Compilation
-FROM node:19-alpine as builder
-WORKDIR /usr/src/product-query
+FROM node:alpine As development
+
+WORKDIR /usr/src/app
+
 COPY package*.json ./
+
 COPY tsconfig.json ./
-COPY src/ ./src/
-RUN npm install --save-dev typescript
+
 RUN npm install -g npm@9.6.3
-COPY src/app.ts ./
+
+COPY . .
+
 RUN npm run build
 
-# Run
-FROM node:19-alpine
-WORKDIR /usr/app
-COPY --from=builder /usr/src/product-query/dist /usr/app
-COPY package.json ./
+FROM node:alpine as production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
 RUN npm install -g npm@9.6.3
-USER node 
-CMD ["npm", "run", "start"]
+
+
+COPY . .
+
+COPY --from=development /usr/src/app/dist ./dist
+
+CMD ["node", "dist/apps/products/main"]

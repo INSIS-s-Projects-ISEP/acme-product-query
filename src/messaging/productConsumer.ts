@@ -1,4 +1,4 @@
-import { Channel, ConsumeMessage } from "amqplib";
+import { Channel, ConsumeMessage } from 'amqplib';
 import ProductRepository from "../domain/repository/productRepository";
 
 class ProductConsumer {
@@ -38,7 +38,7 @@ class ProductConsumer {
   }
 
   public async consumeGet(): Promise<void> {
-    console.log("Consumer listening get...");
+    // console.log("Consumer listening get...");
     await this.channel.consume(this.queueName, async (msg) => {
       if (msg !== null) {
         this.getAllProdRabbitMQ(msg);
@@ -47,7 +47,7 @@ class ProductConsumer {
   }
 
   public async consumeDel(): Promise<void> {
-    console.log("Consumer listening delete...");
+    // console.log("Consumer listening delete...");
     await this.channel.consume(this.queueName, async (msg) => {
       if (msg) {
         try {

@@ -114,7 +114,7 @@ class ProductController {
           });
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       return response
         .status(400)
         .json({
@@ -148,7 +148,7 @@ class ProductController {
         designation,
         description
       );
-      console.log(sku);
+      // console.log(sku);
 
       if (!product) {
         res.status(404).json({ message: "Product not found" });
@@ -156,7 +156,7 @@ class ProductController {
       }
       res.status(200).json(product);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       res.status(400).json({ message: "Internal server error" });
     }
   }

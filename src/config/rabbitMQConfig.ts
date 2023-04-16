@@ -1,6 +1,6 @@
 import * as amqp from "amqplib";
 import { Channel } from "amqplib";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import ProductConsumer from "../messaging/productConsumer";
 
 const idInstance = uuidv4()

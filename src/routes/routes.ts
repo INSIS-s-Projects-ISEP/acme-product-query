@@ -1,3 +1,4 @@
+declare module 'express';
 import { Router } from "express";
 import ProductController from "../api/controller/productController";
 

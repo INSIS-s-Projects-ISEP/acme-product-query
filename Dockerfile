@@ -23,6 +23,8 @@ COPY package*.json ./
 
 RUN npm install -g npm@9.6.3
 
+RUN docker run --name mongo-productquery -d -p 27017:27017 mongo
+
 
 COPY . .
 

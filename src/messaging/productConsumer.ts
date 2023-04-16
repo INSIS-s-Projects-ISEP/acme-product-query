@@ -25,7 +25,7 @@ class ProductConsumer {
       this.channel.bindQueue((await queueResult).queue, queueN, '');
 
 
-        this.channel.consume((await queueResult).queue, (msg) => {
+        this.channel.consume((await queueResult).queue, (msg: ConsumeMessage | null) => {
           console.log(`Resposta: ${msg?.content.toString()}`);
         }, { noAck: true });
 
@@ -39,7 +39,7 @@ class ProductConsumer {
 
   public async consumeGet(): Promise<void> {
     // console.log("Consumer listening get...");
-    await this.channel.consume(this.queueName, async (msg) => {
+    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
       if (msg !== null) {
         this.getAllProdRabbitMQ(msg);
       }
@@ -48,7 +48,7 @@ class ProductConsumer {
 
   public async consumeDel(): Promise<void> {
     // console.log("Consumer listening delete...");
-    await this.channel.consume(this.queueName, async (msg) => {
+    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
       if (msg) {
         try {
           const sku = msg.content.toString("utf-8");
@@ -64,7 +64,7 @@ class ProductConsumer {
 
   public async consumeUpdate(): Promise<void> {
     console.log("Consumer listening update...");
-    await this.channel.consume(this.queueName, async (msg) => {
+    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
       console.log("Consumer listening create...", this.queueName);
       if (msg !== null) {
         const { sku, designation, description } = JSON.parse(
@@ -89,7 +89,7 @@ class ProductConsumer {
 
   public async consumeCreate(): Promise<void> {
     console.log("Consumer listening create...");
-    await this.channel.consume(this.queueName, async (msg) => {
+    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
       if (msg !== null) {
         const { sku, designation, description } = JSON.parse(
           msg.content.toString()

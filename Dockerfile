@@ -8,6 +8,8 @@
 
 # RUN npm install --save-dev @types/mongoose @types/amqplib
 
+# RUN npm install --save-dev @types/node
+
 
 
 # COPY . .
@@ -33,7 +35,7 @@
 
 FROM node
 
-WORKDIR  /usr/src/app
+WORKDIR  /src/
 
 COPY package.json ./
 

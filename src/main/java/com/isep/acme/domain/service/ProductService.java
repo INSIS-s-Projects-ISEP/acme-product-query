@@ -1,26 +1,23 @@
 package com.isep.acme.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.isep.acme.domain.model.Product;
-import com.isep.acme.dto.ProductDTO;
-import com.isep.acme.dto.ProductDetailDTO;
 
 public interface ProductService {
 
-    Optional<ProductDTO> findBySku(final String sku);
+    Optional<Product> findBySku(String sku);
 
-    Optional<Product> getProductBySku(final String sku);
+    Optional<Product> getProductBySku(String sku);
 
-    Iterable<ProductDTO> findByDesignation(final String designation);
+    List<Product> findByDesignation(String designation);
 
-    Iterable<ProductDTO> getCatalog();
+    List<Product> findAll();
 
-    ProductDetailDTO getDetails(final String sku);
+    Product create(Product manager);
 
-    ProductDTO create(final Product manager);
+    Product updateBySku(String sku, Product product);
 
-    ProductDTO updateBySku(final String sku, final Product product);
-
-    void deleteBySku(final String sku);
+    void deleteBySku(String sku);
 }

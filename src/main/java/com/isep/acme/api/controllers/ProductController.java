@@ -1,5 +1,6 @@
 package com.isep.acme.api.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.isep.acme.domain.model.Product;
 import com.isep.acme.domain.service.ProductService;
-import com.isep.acme.dto.ProductDTO;
+import com.isep.acme.dto.mapper.ProductMapper;
+import com.isep.acme.dto.response.ProductResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,39 +23,42 @@ import lombok.AllArgsConstructor;
 
 @Tag(name = "Product", description = "Endpoints for managing  products")
 @RestController
-@RequestMapping("/products")
 @AllArgsConstructor
-class ProductController {
+@RequestMapping("/products")
+public class ProductController {
 
-    private final ProductService service;
-
+    private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @Operation(summary = "gets catalog, i.e. all products")
     @GetMapping
-    public ResponseEntity<Iterable<ProductDTO>> getCatalog() {
-       final var products = service.getCatalog();
+    public ResponseEntity<List<ProductResponse>> getCatalog() {
 
-       return ResponseEntity.ok().body( products );
+        List<Product> products = productService.findAll();
+        List<ProductResponse> responses = productMapper.toResponseList(products);
+
+        return ResponseEntity.ok().body(responses);
     }
 
     @Operation(summary = "finds product by sku")
     @GetMapping(value = "/{sku}")
-    public ResponseEntity<ProductDTO> getProductBySku(@PathVariable("sku") final String sku) {
+    public ResponseEntity<ProductResponse> getProductBySku(@PathVariable("sku") String sku) {
 
-        final Optional<ProductDTO> product = service.findBySku(sku);
+        Optional<Product> optProduct = productService.findBySku(sku);
+        if(optProduct.isPresent()){
+            Product product = optProduct.get();
+            ProductResponse response = productMapper.toResponse(product);
+            return ResponseEntity.ok().body(response);
+        }
 
-        if( product.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Product not found.");
-        else
-            return ResponseEntity.ok().body(product.get());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
     }
 
     @Operation(summary = "finds product by designation")
     @GetMapping(value = "/designation/{designation}")
-    public ResponseEntity<Iterable<ProductDTO>> findAllByDesignation(@PathVariable("designation") final String designation){
-
-        final Iterable<ProductDTO> products = service.findByDesignation( designation );
-        
-        return ResponseEntity.ok().body( products );
+    public ResponseEntity<List<ProductResponse>> findAllByDesignation(@PathVariable("designation") String designation){
+        List<Product> products = productService.findByDesignation(designation);
+        List<ProductResponse> responses = productMapper.toResponseList(products);
+        return ResponseEntity.ok().body(responses);
     }
 }

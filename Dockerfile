@@ -23,7 +23,12 @@ COPY package*.json ./
 
 RUN npm install -g npm@9.6.3
 
-RUN apt-get update && apt-get install -y mongodb
+
+#Create MongoDB Image for MongoDB Tutorial Application
+FROM mongo
+EXPOSE 27017
+RUN docker build -t productmongo:0.1
+RUN docker run --detach --name=jspmongo --publish 37017:27017 productmongo:0.1
 
 
 COPY . .

@@ -178,13 +178,13 @@
     "yarn": "^1.22.19"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
-    "build": "tsc",
-    "lint": "tslint -c tslint.json src/**/*.ts",
-    "prepublish": "npm run build",
-    "start": "node app.js"
-  },
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+      "build": "tsc",
+      "lint": "tslint -c tslint.json src/**/*.ts",
+      "prepublish": "npm run build",
+      "start": "node app.js"
+    },
   "author": "naironcarneiro",
   "license": "ISC"
 }

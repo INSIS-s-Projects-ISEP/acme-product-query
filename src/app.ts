@@ -1,5 +1,6 @@
-import express = require("express");
-import mongoose from "mongoose";
+const express = require('express');
+const mongoose = require('mongoose');
+
 import routes from "./routes/routes";
 import RabbitMQConfig from "./config/rabbitMQConfig";
 

@@ -65,13 +65,6 @@ class Product{
         return new ProductDTO(this.sku, this.designation);
     }
 
-    static find() {
-        throw new Error('Method not implemented.');
-    }
-    static findById(sku: string) {
-        throw new Error('Method not implemented.');
-    }
-
 }
 
 export default Product;

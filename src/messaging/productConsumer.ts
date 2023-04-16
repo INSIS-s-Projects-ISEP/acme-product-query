@@ -82,7 +82,6 @@ class ProductConsumer {
           sku,
           designation,
           description,
-          msg
         );
       }
     });
@@ -117,15 +116,12 @@ class ProductConsumer {
   }
 
   async deleteProdRabbitMQ(
-    queueName: string,
     sku: string,
-    msg: ConsumeMessage
   ) {
     await this.productRepository.deleteBySku(sku);
   }
 
   async updateProdRabbitMQ(
-    queueName: string,
     sku: string,
     designation: string,
     description: string,

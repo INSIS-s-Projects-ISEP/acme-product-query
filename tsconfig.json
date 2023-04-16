@@ -33,6 +33,6 @@
 	},
 	"include": [
 		"typings/**/*",
-		"src/**/*"
+		"src/**/*.ts"
 	]
 }

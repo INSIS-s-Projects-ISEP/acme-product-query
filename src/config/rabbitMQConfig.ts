@@ -1,5 +1,5 @@
 import * as amqp from "amqplib";
-import { Channel, Connection } from "amqplib";
+import { Channel } from "amqplib";
 import { v4 as uuidv4 } from "uuid";
 import ProductConsumer from "../messaging/productConsumer";
 
@@ -20,11 +20,9 @@ const exchangeDelete = "product.product-deleted";
 const exchangeType = "fanout";
 
 class RabbitMQConfig {
-  private connection: Connection | undefined;
   private channel: Channel | undefined;
 
   constructor() {
-    this.connection = undefined;
     this.channel = undefined;
   }
 

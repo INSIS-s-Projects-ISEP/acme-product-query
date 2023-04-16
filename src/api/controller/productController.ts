@@ -7,7 +7,7 @@ const productService = new ProductService();
 const valid = new ValidateProductData();
 class ProductController {
   static async findAllProducts(
-    request: Request,
+    _request: Request,
     response: Response
   ): Promise<any> {
     try {

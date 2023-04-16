@@ -1,4 +1,3 @@
-import { ProductDTO } from "../../dto/productDTO";
 
 class Product{
    
@@ -61,9 +60,9 @@ class Product{
         this.setDescription(p.description);
     }
 
-    public toDto(): ProductDTO {
-        return new ProductDTO(this.sku, this.designation);
-    }
+    // public toDto(): ProductDTO {
+    //     return new ProductDTO(this.sku, this.designation);
+    // }
 
 }
 

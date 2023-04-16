@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ProductConsumer from "../messaging/productConsumer";
 
 const idInstance = uuidv4()
-const host = "192.168.1.253";
+const host = "localhost";
 const port = 5672;
 const user = "admin";
 const pass = "123456";

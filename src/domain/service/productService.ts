@@ -35,7 +35,6 @@ class ProductService{
 
 
     async deleteBySku(sku: string) {
-      console.log("333000000",sku)
       const result = await this.productRepository.deleteBySku(sku);
       return result;
     

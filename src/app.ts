@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 import routes from "./routes/routes";
 import RabbitMQConfig from "./config/rabbitMQConfig";
 
-mongoose.connect('mongodb://localhost/productquery');
+mongoose.connect('mongodb://message-broker/productquery');
 
 const app = express();
 

@@ -24,10 +24,10 @@ const instanceId = `${os.hostname()}:${process.env.PORT}`;
 
 const client = new Eureka({
     instance: {
-        app: 'acme-product-query',
+        app: 'product-query',
         instanceId,
         hostName: process.env.HOSTNAME,
-        ipAddr: '127.0.0.1',
+        ipAddr: 'localhost',
         port: {
             '$': 3000,
             '@enabled': 'true'
@@ -41,7 +41,12 @@ const client = new Eureka({
     eureka: {
         host: 'discovery-system',
         port: 8761,
-        servicePath: '/eureka/apps/'
+        servicePath: '/eureka/apps/',
+        fetchRegistry: true,
+        registerWithEureka: true,
+        useDns: false,
+        preferIpAddress: true,
+        defaultZone: 'http://discovery-system:8761/eureka'
     }
 });
 

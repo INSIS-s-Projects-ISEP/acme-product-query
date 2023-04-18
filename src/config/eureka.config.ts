@@ -5,7 +5,7 @@ export const eurekaConfig = new Eureka({
   instance: {
     app: 'product-query',
     hostName: process.env.HOSTNAME || 'localhost',
-    ipAddr: '172.0.0.1',
+    ipAddr: process.env.HOSTNAME || 'localhost',
     port: {
       '$': 3000,
       '@enabled': 'true',

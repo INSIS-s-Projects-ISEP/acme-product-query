@@ -30,12 +30,8 @@ class ProductRepository {
       }
 
       async deleteBySku(sku: string):Promise<any>{
-        // await mongoose.connect('mongodb://127.0.0.1/productquery');
-        // console.log(typeof sku);
-        // console.log("------------------sku--------------------", sku.toString())
-        // const result = await db.collection('products').deleteOne({ sku: sku });
+        console.log("deletedrepo")
         const result = await ProductModel.deleteOne({ sku: sku });
-        // const result = await ProductModel.findByIdAndDelete(id);
         return result;
       }
 

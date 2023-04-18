@@ -4,9 +4,7 @@ const mongoose = require('mongoose');
 import routes from "./routes/routes";
 import RabbitMQConfig from "./config/rabbitMQConfig";
 
-mongoose.connect('mongodb://127.0.0.1/productquery',{
-    family: 4,
-});
+mongoose.connect('mongodb://localhost/productquery');
 
 const app = express();
 

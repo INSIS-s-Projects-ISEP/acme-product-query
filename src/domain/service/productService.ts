@@ -35,13 +35,13 @@ class ProductService{
 
 
     async deleteBySku(sku: string) {
+      console.log("deleted")
       const result = await this.productRepository.deleteBySku(sku);
       return result;
     
   }  
 
   async findSkuUpdate(sku: string, designation: string, description: string ) {
-    // console.log(sku)
     const result = await this.productRepository.update(sku, designation, description );
     return result;
   

@@ -114,7 +114,6 @@ class ProductController {
           });
       }
     } catch (error) {
-      // console.error(error);
       return response
         .status(400)
         .json({
@@ -124,7 +123,7 @@ class ProductController {
     }
   }
 
-  static async deleteBySku(request: Request, response: Response) {
+  static async deleteBySku(request: Request, response: Response):Promise<any>{
     try {
       const sku = request.params.sku;
       const result = await productService.deleteBySku(sku);
@@ -140,7 +139,8 @@ class ProductController {
   }
 
   static async updateProduct(req: Request, res: Response): Promise<void> {
-    const { sku, designation, description } = req.body;
+    const { designation, description } = req.body;
+    const sku = req.params.sku;
 
     try {
       const product = await productService.findSkuUpdate(
@@ -148,7 +148,6 @@ class ProductController {
         designation,
         description
       );
-      // console.log(sku);
 
       if (!product) {
         res.status(404).json({ message: "Product not found" });
@@ -156,7 +155,6 @@ class ProductController {
       }
       res.status(200).json(product);
     } catch (error) {
-      // console.error(error);
       res.status(400).json({ message: "Internal server error" });
     }
   }

@@ -1,4 +1,4 @@
-import { Channel, ConsumeMessage } from 'amqplib';
+import { Channel, ConsumeMessage } from "amqplib";
 import ProductRepository from "../domain/repository/productRepository";
 
 class ProductConsumer {
@@ -14,90 +14,111 @@ class ProductConsumer {
   }
 
   public async consumeRPC(queueN: string, idInstance: string) {
+    this.channel.assertExchange(queueN, "fanout");
 
-    this.channel.assertExchange(queueN, 'fanout');
-
-    const queueResult = this.channel.assertQueue('', {
-      exclusive: true, autoDelete: true
+    const queueResult = this.channel.assertQueue("", {
+      exclusive: true,
+      autoDelete: true,
     });
 
-      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C",(await queueResult).queue);
-      this.channel.bindQueue((await queueResult).queue, queueN, '');
+    console.log(
+      " [*] Waiting for messages in %s. To exit press CTRL+C",
+      (await queueResult).queue
+    );
+    this.channel.bindQueue((await queueResult).queue, queueN, "");
 
+    this.channel.consume(
+      (await queueResult).queue,
+      (msg: ConsumeMessage | null) => {
+        console.log(`Resposta: ${msg?.content.toString()}`);
+      },
+      { noAck: true }
+    );
 
-        this.channel.consume((await queueResult).queue, (msg: ConsumeMessage | null) => {
-          console.log(`Resposta: ${msg?.content.toString()}`);
-        }, { noAck: true });
+    const payload = JSON.stringify(idInstance);
+    const options = { replyTo: (await queueResult).queue };
+    this.channel.sendToQueue(
+      queueN,
+      Buffer.from(JSON.stringify(payload)),
+      options
+    );
 
-        const payload = JSON.stringify(idInstance)
-      const options = { replyTo: (await queueResult).queue};
-      this.channel.sendToQueue(queueN, Buffer.from(JSON.stringify(payload)), options);
-
-      await this.channel.deleteQueue((await queueResult).queue);
-              
+    await this.channel.deleteQueue((await queueResult).queue);
   }
 
   public async consumeGet(): Promise<void> {
     // console.log("Consumer listening get...");
-    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
-      if (msg !== null) {
-        this.getAllProdRabbitMQ(msg);
+    await this.channel.consume(
+      this.queueName,
+      async (msg: ConsumeMessage | null) => {
+        if (msg !== null) {
+          this.getAllProdRabbitMQ(msg);
+        }
       }
-    });
+    );
   }
 
   public async consumeDel(): Promise<void> {
     // console.log("Consumer listening delete...");
-    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
-      if (msg) {
-        try {
-          const sku = msg.content.toString("utf-8");
+    await this.channel.consume(
+      this.queueName,
+      async (msg: ConsumeMessage | null) => {
+        if (msg) {
+          try {
+            const sku = msg.content.toString("utf-8");
 
-          await this.productRepository.deleteBySku(sku);
-        } catch (error) {
-          console.error("Error parsing message", error);
-          this.channel.nack(msg);
+            await this.productRepository.deleteBySku(sku);
+          } catch (error) {
+            console.error("Error parsing message", error);
+            this.channel.nack(msg);
+          }
         }
       }
-    });
+    );
   }
 
   public async consumeUpdate(): Promise<void> {
     console.log("Consumer listening update...");
-    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
-      console.log("Consumer listening create...", this.queueName);
-      if (msg !== null) {
-        const { sku, designation, description } = JSON.parse(
-          msg.content.toString()
-        );
-        console.log(
-          "update",
-          sku,
-          msg.content.toString(),
-          msg.content.toString("utf-8")
-        );
+    await this.channel.consume(
+      this.queueName,
+      async (msg: ConsumeMessage | null) => {
+        console.log("Consumer listening create...", this.queueName);
+        if (msg !== null) {
+          const { sku, designation, description } = JSON.parse(
+            msg.content.toString()
+          );
+          console.log(
+            "update",
+            sku,
+            msg.content.toString(),
+            msg.content.toString("utf-8")
+          );
 
-        this.updateProdRabbitMQ(
-          this.queueName,
-          sku,
-          designation,
-          description,
-        );
+          this.updateProdRabbitMQ(
+            this.queueName,
+            sku,
+            designation,
+            description
+          );
+        }
       }
-    });
+    );
   }
 
   public async consumeCreate(): Promise<void> {
     console.log("Consumer listening create...");
-    await this.channel.consume(this.queueName, async (msg: ConsumeMessage | null) => {
-      if (msg !== null) {
-        const { sku, designation, description } = JSON.parse(
-          msg.content.toString()
-        );
+    await this.channel.consume(
+      this.queueName,
+      async (msg: ConsumeMessage | null) => {
+        if (msg !== null) {
+          const { sku, designation, description } = JSON.parse(
+            msg.content.toString()
+          );
 
-        this.createProdRabbitMQ(sku, designation, description, msg);
+          this.createProdRabbitMQ(sku, designation, description, msg);
+        }
       }
-    });
+    );
   }
 
   async createProdRabbitMQ(
@@ -111,13 +132,10 @@ class ProductConsumer {
       this.channel.ack(msg);
     } catch (error) {
       this.channel.ack(msg);
-      
     }
   }
 
-  async deleteProdRabbitMQ(
-    sku: string,
-  ) {
+  async deleteProdRabbitMQ(sku: string) {
     await this.productRepository.deleteBySku(sku);
   }
 
@@ -128,36 +146,36 @@ class ProductConsumer {
     msg: ConsumeMessage
   ) {
     // try {
-      await this.productRepository.update(sku, designation, description);
+    await this.productRepository.update(sku, designation, description);
 
-      this.channel.ack(msg);
-      // this.channel.sendToQueue(
-      //   queueName,
-      //   Buffer.from(
-      //     JSON.stringify({
-      //       success: true,
-      //       message: "Product updated successfully",
-      //     })
-      //   )
-      // );
-      // this.channel.ack(msg);
-      // this.channel.sendToQueue(
-      //   queueName,
-      //   Buffer.from(
-      //     JSON.stringify({ success: false, message: "Product not found" })
-      //   )
-      // );
+    this.channel.ack(msg);
+    // this.channel.sendToQueue(
+    //   queueName,
+    //   Buffer.from(
+    //     JSON.stringify({
+    //       success: true,
+    //       message: "Product updated successfully",
+    //     })
+    //   )
+    // );
+    // this.channel.ack(msg);
+    // this.channel.sendToQueue(
+    //   queueName,
+    //   Buffer.from(
+    //     JSON.stringify({ success: false, message: "Product not found" })
+    //   )
+    // );
     // } catch (error) {
-      // this.channel.ack(msg);
-      // this.channel.sendToQueue(
-      //   queueName,
-        // Buffer.from(
-        //   JSON.stringify({
-        //     success: false,
-        //     message: "Failed to update product",
-        //   })
-        // )
-      // );
+    // this.channel.ack(msg);
+    // this.channel.sendToQueue(
+    //   queueName,
+    // Buffer.from(
+    //   JSON.stringify({
+    //     success: false,
+    //     message: "Failed to update product",
+    //   })
+    // )
+    // );
     // }
   }
 

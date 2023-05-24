@@ -1,53 +1,54 @@
 import ProductRepository from "../repository/productRepository";
 
-class ProductService{
-    productRepository: ProductRepository;
+class ProductService {
+  productRepository: ProductRepository;
 
-    constructor() {
-        this.productRepository = new ProductRepository();
-      }
-    
-      async create(sku: string, designation: string, description: string) {
-        const created = await this.productRepository.create(sku, designation, description);
-        return created;
-      }
-    
-      async getProductById(id: string) {
-        const result = await this.productRepository.findProductById(id);
-        return result;
-      }
-    
-      async getProductBySku(sku: string) {
-        const result = await this.productRepository.findProductBySku(sku);
-        return result;
-      }
+  constructor() {
+    this.productRepository = new ProductRepository();
+  }
 
-      async getProductByDesignation(designation: string) {
-        const result = await this.productRepository.findByDesignation(designation);
-        return result;
-      }
-    
-      async findAllProducts() {
-        const result = await this.productRepository.findAllProducts();
-        return result;
-      
-    }
+  async create(sku: string, designation: string, description: string) {
+    const created = await this.productRepository.create(
+      sku,
+      designation,
+      description
+    );
+    return created;
+  }
 
-
-    async deleteBySku(sku: string) {
-      console.log("deleted")
-      const result = await this.productRepository.deleteBySku(sku);
-      return result;
-    
-  }  
-
-  async findSkuUpdate(sku: string, designation: string, description: string ) {
-    const result = await this.productRepository.update(sku, designation, description );
+  async getProductById(id: string) {
+    const result = await this.productRepository.findProductById(id);
     return result;
-  
-}
+  }
 
-}
+  async getProductBySku(sku: string) {
+    const result = await this.productRepository.findProductBySku(sku);
+    return result;
+  }
 
+  async getProductByDesignation(designation: string) {
+    const result = await this.productRepository.findByDesignation(designation);
+    return result;
+  }
+
+  async findAllProducts() {
+    const result = await this.productRepository.findAllProducts();
+    return result;
+  }
+
+  async deleteBySku(sku: string) {
+    const result = await this.productRepository.deleteBySku(sku);
+    return result;
+  }
+
+  async findSkuUpdate(sku: string, designation: string, description: string) {
+    const result = await this.productRepository.update(
+      sku,
+      designation,
+      description
+    );
+    return result;
+  }
+}
 
 export default ProductService;

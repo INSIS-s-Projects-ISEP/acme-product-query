@@ -107,23 +107,19 @@ class ProductController {
       if (product) {
         return response.status(200).json(product);
       } else {
-        return response
-          .status(404)
-          .json({
-            message: `Product with designation ${designation} not found`,
-          });
+        return response.status(404).json({
+          message: `Product with designation ${designation} not found`,
+        });
       }
     } catch (error) {
-      return response
-        .status(400)
-        .json({
-          error:
-            'Could not search product. Missing required parameter "designation".',
-        });
+      return response.status(400).json({
+        error:
+          'Could not search product. Missing required parameter "designation".',
+      });
     }
   }
 
-  static async deleteBySku(request: Request, response: Response):Promise<any>{
+  static async deleteBySku(request: Request, response: Response): Promise<any> {
     try {
       const sku = request.params.sku;
       const result = await productService.deleteBySku(sku);

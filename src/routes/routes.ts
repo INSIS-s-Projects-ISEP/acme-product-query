@@ -1,4 +1,4 @@
-declare module 'express';
+declare module "express";
 import { Router } from "express";
 import ProductController from "../api/controller/productController";
 
@@ -10,13 +10,15 @@ routes.get("/products/sku/:sku", ProductController.findProductBySku);
 
 routes.get("/products/id/:id", ProductController.findProductById);
 
-routes.get("/products/designation/:designation", ProductController.searchByDesignation);
+routes.get(
+  "/products/designation/:designation",
+  ProductController.searchByDesignation
+);
 
 routes.post("/products", ProductController.create);
 
-routes.delete('/products/sku/:sku', ProductController.deleteBySku);
+routes.delete("/products/sku/:sku", ProductController.deleteBySku);
 
-routes.put('/products/sku/:sku', ProductController.updateProduct);
-
+routes.put("/products/sku/:sku", ProductController.updateProduct);
 
 export default routes;

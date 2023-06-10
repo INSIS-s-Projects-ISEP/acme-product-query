@@ -13,11 +13,7 @@ class ProductController {
     try {
       const products = await productService.findAllProducts();
 
-      if (products.length > 0) {
-        return response.status(200).json(products);
-      } else {
-        return response.status(404).json({ message: `Not found product` });
-      }
+      return response.status(200).json(products);
     } catch (error) {
       return response.status(400).json({
         error:
